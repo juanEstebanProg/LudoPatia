@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎰 Casino del Minero</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Bungee&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NOTIFICACIÓN TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <!-- PANEL DE LOGROS FLOTANTE -->
+  <div id="achievement-popup" class="achievement-popup hidden">
+    <div class="ach-icon">🏆</div>
+    <div class="ach-text">
+      <div class="ach-title" id="ach-title-text"></div>
+      <div class="ach-desc" id="ach-desc-text"></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-left">
+      <h1 class="logo">🎰 Casino del Minero</h1>
+    </div>
+    <div class="header-right">
+      <div class="balance-display">
+        <span class="balance-label">💰 SALDO</span>
+        <span class="balance-amount" id="balance-display">$0</span>
+      </div>
+      <button class="btn-achievements" onclick="toggleAchievements()">🏆 Logros</button>
+    </div>
+  </header>
+
+  <!-- SCREENS -->
+  <main id="app">
+
+    <!-- ===================== PANTALLA PRINCIPAL ===================== -->
+    <div id="screen-main" class="screen active">
+      <div class="main-title-area">
+        <h2 class="section-title">¿A QUÉ VAS A JUGAR HOY?</h2>
+        <p class="section-sub">Elige tu destino, minero afortunado</p>
+      </div>
+      <div class="games-grid">
+        <button class="game-card" onclick="goTo('screen-slots')">
+          <div class="game-img">🎰</div>
+          <div class="game-name">TRAGAPERRAS</div>
+          <div class="game-desc">Gira y gana</div>
+        </button>
+        <button class="game-card" onclick="goTo('screen-multiplier')">
+          <div class="game-img">🎡</div>
+          <div class="game-name">RULETA<br>MULTIPLICADORA</div>
+          <div class="game-desc">x2 hasta x20</div>
+        </button>
+        <button class="game-card" onclick="goTo('screen-roulette')">
+          <div class="game-img">🔴</div>
+          <div class="game-name">RULETA<br>ROJO/NEGRO</div>
+          <div class="game-desc">50/50 clásica</div>
+        </button>
+        <button class="game-card" onclick="goTo('screen-blackjack')">
+          <div class="game-img">🃏</div>
+          <div class="game-name">BLACKJACK</div>
+          <div class="game-desc">Llega al 21</div>
+        </button>
+        <button class="game-card" onclick="goTo('screen-dice')">
+          <div class="game-img">🎲</div>
+          <div class="game-name">DADOS<br>DE LA SUERTE</div>
+          <div class="game-desc">Apuesta al número</div>
+        </button>
+        <button class="game-card" onclick="goTo('screen-crash')">
+          <div class="game-img">🚀</div>
+          <div class="game-name">CRASH</div>
+          <div class="game-desc">Retira antes del crash</div>
+        </button>
+        <button class="game-card work-card" onclick="goTo('screen-work')">
+          <div class="game-img">⛏️</div>
+          <div class="game-name">TRABAJAR</div>
+          <div class="game-desc">Pica piedras y gana</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================== TRABAJAR ===================== -->
+    <div id="screen-work" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">⛏️ MINA DEL MINERO</h2>
+      <p class="screen-sub">Haz clic en la piedra para picarla</p>
+      <div class="mine-area">
+        <div class="cooldown-bar-wrap" id="cooldown-wrap" style="display:none">
+          <div class="cooldown-bar" id="cooldown-bar"></div>
+          <span id="cooldown-label">Esperando...</span>
+        </div>
+        <button class="rock" id="rock-btn" onclick="mineRock()">
+          <span class="rock-emoji">🪨</span>
+        </button>
+        <div class="mine-result" id="mine-result"></div>
+      </div>
+      <div class="drop-table">
+        <h3>📋 Tabla de drops</h3>
+        <div class="drop-grid">
+          <div class="drop-item"><span>💨</span><b>Nada</b><span class="drop-val">$0</span></div>
+          <div class="drop-item"><span>🪨</span><b>Carbón</b><span class="drop-val">$10</span></div>
+          <div class="drop-item"><span>🟤</span><b>Cobre</b><span class="drop-val">$50</span></div>
+          <div class="drop-item"><span>⚙️</span><b>Hierro</b><span class="drop-val">$150</span></div>
+          <div class="drop-item"><span>💎</span><b>Diamante</b><span class="drop-val">$500</span></div>
+          <div class="drop-item"><span>💚</span><b>Esmeralda</b><span class="drop-val">$1,500</span></div>
+          <div class="drop-item rare"><span>🧙</span><b>Enano</b><span class="drop-val">$10,000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== TRAGAPERRAS ===================== -->
+    <div id="screen-slots" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🎰 TRAGAPERRAS</h2>
+      <div class="game-container">
+        <div class="slots-machine">
+          <div class="slots-reels">
+            <div class="reel" id="reel1"><span id="r1">🍒</span></div>
+            <div class="reel" id="reel2"><span id="r2">🍒</span></div>
+            <div class="reel" id="reel3"><span id="r3">🍒</span></div>
+          </div>
+          <div class="slots-result" id="slots-result"></div>
+        </div>
+        <div class="bet-panel">
+          <label>Apuesta: <input type="number" id="slots-bet" value="10" min="1" class="bet-input" /></label>
+          <button class="btn-spin" onclick="spinSlots()" id="slots-spin-btn">🎰 GIRAR</button>
+        </div>
+        <div class="paytable">
+          <h4>💰 Pagos</h4>
+          <div>3 iguales raros → x25</div>
+          <div>3 iguales comunes → x10</div>
+          <div>2 iguales → x2</div>
+          <div>BAR BAR BAR → x50</div>
+          <div>7️⃣ 7️⃣ 7️⃣ → x100</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== RULETA MULTIPLICADORA ===================== -->
+    <div id="screen-multiplier" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🎡 RULETA MULTIPLICADORA</h2>
+      <div class="game-container">
+        <canvas id="wheel-canvas" width="320" height="320"></canvas>
+        <div class="wheel-pointer">▼</div>
+        <div class="wheel-result" id="wheel-result"></div>
+        <div class="bet-panel">
+          <label>Apuesta: <input type="number" id="wheel-bet" value="10" min="1" class="bet-input" /></label>
+          <button class="btn-spin" onclick="spinWheel()" id="wheel-spin-btn">🎡 GIRAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== RULETA ROJO/NEGRO ===================== -->
+    <div id="screen-roulette" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🔴 RULETA ROJO / NEGRO</h2>
+      <div class="game-container">
+        <div class="roulette-ball-area">
+          <div class="roulette-wheel-visual" id="rou-wheel">
+            <div class="roulette-inner" id="rou-inner">?</div>
+          </div>
+        </div>
+        <div class="rou-result" id="rou-result"></div>
+        <div class="bet-panel">
+          <label>Apuesta: <input type="number" id="rou-bet" value="10" min="1" class="bet-input" /></label>
+          <div class="color-btns">
+            <button class="btn-red" onclick="playRoulette('red')">🔴 ROJO (x2)</button>
+            <button class="btn-black" onclick="playRoulette('black')">⚫ NEGRO (x2)</button>
+            <button class="btn-green" onclick="playRoulette('green')">💚 VERDE (x14)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== BLACKJACK ===================== -->
+    <div id="screen-blackjack" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🃏 BLACKJACK</h2>
+      <div class="game-container bj-container">
+        <div class="bj-area">
+          <div class="bj-dealer">
+            <h4>Dealer <span id="bj-dealer-score"></span></h4>
+            <div class="card-row" id="bj-dealer-cards"></div>
+          </div>
+          <div class="bj-player">
+            <h4>Tú <span id="bj-player-score"></span></h4>
+            <div class="card-row" id="bj-player-cards"></div>
+          </div>
+        </div>
+        <div class="bj-result" id="bj-result"></div>
+        <div class="bet-panel bj-bet-panel" id="bj-bet-area">
+          <label>Apuesta: <input type="number" id="bj-bet" value="10" min="1" class="bet-input" /></label>
+          <button class="btn-spin" onclick="startBlackjack()">🃏 REPARTIR</button>
+        </div>
+        <div class="bj-actions hidden" id="bj-actions">
+          <button class="btn-hit" onclick="bjHit()">👊 Pedir</button>
+          <button class="btn-stand" onclick="bjStand()">✋ Plantarse</button>
+          <button class="btn-double" onclick="bjDouble()">💰 Doblar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DADOS ===================== -->
+    <div id="screen-dice" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🎲 DADOS DE LA SUERTE</h2>
+      <div class="game-container">
+        <div class="dice-display">
+          <div class="die" id="die1">⚀</div>
+          <div class="die" id="die2">⚀</div>
+        </div>
+        <p class="dice-sub">Elige si el total será Alto (8-12), Bajo (2-6) o Doble (mismo número)</p>
+        <div class="dice-result" id="dice-result"></div>
+        <div class="bet-panel">
+          <label>Apuesta: <input type="number" id="dice-bet" value="10" min="1" class="bet-input" /></label>
+          <div class="dice-btns">
+            <button class="btn-dice" onclick="rollDice('high')">⬆️ Alto (x2)</button>
+            <button class="btn-dice" onclick="rollDice('low')">⬇️ Bajo (x2)</button>
+            <button class="btn-dice" onclick="rollDice('double')">🎯 Doble (x5)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== CRASH ===================== -->
+    <div id="screen-crash" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🚀 CRASH</h2>
+      <div class="game-container">
+        <div class="crash-display">
+          <div class="crash-multiplier" id="crash-mult">1.00x</div>
+          <div class="crash-rocket" id="crash-rocket">🚀</div>
+          <canvas id="crash-canvas" width="400" height="200"></canvas>
+        </div>
+        <div class="crash-result" id="crash-result"></div>
+        <div class="bet-panel" id="crash-bet-panel">
+          <label>Apuesta: <input type="number" id="crash-bet" value="10" min="1" class="bet-input" /></label>
+          <button class="btn-spin" onclick="startCrash()" id="crash-start-btn">🚀 LANZAR</button>
+        </div>
+        <button class="btn-cashout hidden" id="crash-cashout-btn" onclick="cashoutCrash()">💰 RETIRAR</button>
+      </div>
+    </div>
+
+    <!-- ===================== LOGROS ===================== -->
+    <div id="screen-achievements" class="screen">
+      <button class="back-btn" onclick="goTo('screen-main')">← Volver</button>
+      <h2 class="screen-title">🏆 LOGROS</h2>
+      <div class="achievements-grid" id="achievements-grid"></div>
+    </div>
+
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
