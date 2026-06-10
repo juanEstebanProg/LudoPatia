@@ -1085,7 +1085,7 @@ function buyPlush(id) {
   showToast(`${p.emoji} ¡${p.name} añadido a tu colección!`, 'var(--neon-pink)');
 }
 
-// ==========================================
+// ======================= ===================
 //   INITIAL DRAW
 // ==========================================
 setTimeout(() => {
